@@ -31,14 +31,11 @@ local function http_server_start()
     print("HTTP Server start.")
     srv = net.createServer(net.TCP)
     srv:listen(80, function(conn)
-        conn:on("receive", function(conn, payload)
-            print("Received payload: " .. payload)
-            conn:send(string.format("<head><title>NodeMCU Supert Test</title><meta http-equiv=\"refresh\" content=\"30\"></head><body><h1>Temperature: %d.%01d; Humidity: %d.%01d </h1></body>",
-                math.floor(module.temp),
-                module.temp_dec,
-                math.floor(module.humi),
-                module.humi_dec
-            ))
+        conn:on("receive", function(conn, request)
+            print("Received request: " .. request)
+            reply = restmodel.ManageRequest(request)
+            print("Rest model reply:" .. reply)
+            conn:send(reply)
         end)
         conn:on("sent", function(conn)
             conn:close()
@@ -48,6 +45,7 @@ local function http_server_start()
 end
 
 function module.start()
+    restmodel.start()
     http_server_start()
     dht_polling_start()
 end
