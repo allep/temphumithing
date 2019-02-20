@@ -8,7 +8,7 @@ local module = {}
 local function ManageThing(request)
     -- in this case I just need to provide the properties response
 
-    local thingReply = [[200 OK
+    local thingReply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
 {
     "name": "TempHumi",
     "description": "A WoT temperature sensor",
@@ -19,25 +19,25 @@ local function ManageThing(request)
             "unit": "degree celsius",
             "readOnly": true,
             "description": "An ambient temperature sensor",
-            "links": [{ "href": "/properties/temperature" }]
+            "links": [{ "href": "/things/temphumi/properties/temperature" }]
         },
         "humidity": {
             "title": "Humidity",
             "type": "number",
             "unit": "percent",
             "readOnly": true,
-            "links": [{ "href": "/properties/humidity"}]
+            "links": [{ "href": "/things/temphumi/properties/humidity"}]
         }
     },
     "links": [
         {
             "rel": "properties",
-            "href": "/properties"
+            "href": "/things/temphumi/properties"
         },
         {
             "rel": "alternate",
             "mediaType": "text/html",
-            "href": "/"
+            "href": "/things/temphumi"
         }
     ]
 }
@@ -55,7 +55,7 @@ local function ManageTemperature(request)
             math.floor(app.temp),
             app.temp_dec)
 
-        reply = [[200 OK
+        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
 {
     "temperature": ]] .. temperature .. [[
 
@@ -63,7 +63,7 @@ local function ManageTemperature(request)
 ]]
     else
         -- other methods are not allowed
-        reply = "405 Method Not Allowed"
+        reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
 
     print("Debug: " .. reply)
@@ -78,7 +78,7 @@ local function ManageHumidity(request)
             math.floor(app.humi),
             app.humi_dec)
 
-        reply = [[200 OK
+        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
 {
     "humidity": ]] .. humidity .. [[
 
@@ -86,7 +86,7 @@ local function ManageHumidity(request)
 ]]
     else
         -- other methods are not allowed
-        reply = "405 Method Not Allowed"
+        reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
 
     print("Debug: " .. reply)
@@ -105,7 +105,7 @@ local function ManagePropertiesAll(request)
             math.floor(app.humi),
             app.humi_dec)
 
-        reply = [[200 OK
+        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
 {
     "temperature": ]] .. temperature .. [[,
     "humidity": ]] .. humidity .. [[
@@ -114,7 +114,7 @@ local function ManagePropertiesAll(request)
 ]]
     else
         -- other methods are not allowed
-        reply = "405 Method Not Allowed"
+        reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
 
     print("Debug: " .. reply)

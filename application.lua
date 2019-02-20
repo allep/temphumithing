@@ -44,8 +44,13 @@ local function http_server_start()
     print("HTTP Server configured.")
 end
 
+local function mdns_start()
+    mdns.register("temphumi", { description="Temperature and humidity sensor", service="http", port=80, location='Office' })
+end
+
 function module.start()
     restmodel.start()
+    mdns_start()
     http_server_start()
     dht_polling_start()
 end
