@@ -32,9 +32,9 @@ local function http_server_start()
     srv = net.createServer(net.TCP)
     srv:listen(80, function(conn)
         conn:on("receive", function(conn, request)
-            print("Received request: " .. request)
+            -- print("Received request: " .. request)
             reply = restmodel.ManageRequest(request)
-            print("Rest model reply:" .. reply)
+            -- print("Rest model reply:" .. reply)
             conn:send(reply)
         end)
         conn:on("sent", function(conn)
@@ -45,7 +45,7 @@ local function http_server_start()
 end
 
 local function mdns_start()
-    mdns.register("temphumi", { description="Temperature and humidity sensor", service="http", port=80, location='Office' })
+    mdns.register("temphumi", { description="Temperature and humidity sensor", service="webthing", path="/", port=80, location='Office' })
 end
 
 function module.start()

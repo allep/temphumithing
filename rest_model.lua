@@ -8,12 +8,17 @@ local module = {}
 local function ManageThing(request)
     -- in this case I just need to provide the properties response
 
-    local thingReply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
+    local thingReply = [[HTTP/1.0 200 OK
+Content-Type: application/json
+
 {
+    "@context": "https://iot.mozilla.org/schemas/",
+    "@type": ["TemperatureSensor"],
     "name": "TempHumi",
     "description": "A WoT temperature sensor",
     "properties": {
         "temperature": {
+            "@type": "TemperatureProperty",
             "title": "Temperature",
             "type": "number",
             "unit": "degree celsius",
@@ -42,6 +47,7 @@ local function ManageThing(request)
     ]
 }
 ]]
+
     return thingReply
 end
 
@@ -55,7 +61,9 @@ local function ManageTemperature(request)
             math.floor(app.temp),
             app.temp_dec)
 
-        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
+        reply = [[HTTP/1.0 200 OK
+Content-Type: application/json
+
 {
     "temperature": ]] .. temperature .. [[
 
@@ -65,8 +73,6 @@ local function ManageTemperature(request)
         -- other methods are not allowed
         reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
-
-    print("Debug: " .. reply)
     return reply
 end
 
@@ -78,7 +84,9 @@ local function ManageHumidity(request)
             math.floor(app.humi),
             app.humi_dec)
 
-        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
+        reply = [[HTTP/1.0 200 OK
+Content-Type: application/json
+
 {
     "humidity": ]] .. humidity .. [[
 
@@ -88,8 +96,6 @@ local function ManageHumidity(request)
         -- other methods are not allowed
         reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
-
-    print("Debug: " .. reply)
     return reply
 end
 
@@ -105,7 +111,9 @@ local function ManagePropertiesAll(request)
             math.floor(app.humi),
             app.humi_dec)
 
-        reply = [[HTTP/1.0 200 OK\r\nContent-Type: application/json\r\n\r\n
+        reply = [[HTTP/1.0 200 OK
+Content-Type: application/json
+
 {
     "temperature": ]] .. temperature .. [[,
     "humidity": ]] .. humidity .. [[
@@ -116,8 +124,6 @@ local function ManagePropertiesAll(request)
         -- other methods are not allowed
         reply = "HTTP/1.0 405 Method Not Allowed\r\n"
     end
-
-    print("Debug: " .. reply)
     return reply
 end
 
